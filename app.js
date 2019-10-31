@@ -44,7 +44,7 @@ app.get('/hello', function (req, res) {
 
 app.get('/posts', function(req, res) {
     connection.query('SELECT * FROM posts;', function(err, rows) {
-        // console.log(rows);
+        console.log(rows);
         if (err) {
             console.log(err.toString());
             res.status(500).send('Database error');
