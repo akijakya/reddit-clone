@@ -1,14 +1,38 @@
 'use strict';
 
-const path = require('path');
-const bodyParser = require('body-parser');
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+// const path = require('path');
+// const bodyParser = require('body-parser');
+// const urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+// requiring express
 const express = require('express');
 const app = express();
 const PORT = 3000;
 
+// requiring env
+const env = require('dotenv').config();
+
+// connection with the database
+const mysql = require('mysql');
+const connection = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS, 
+    database: process.env.DB_NAME 
+});
+
+connection.connect(function(err) {
+    if (err) {
+      console.log('Error connecting to database');
+      return;
+    }
+    console.log('Connection to database established');
+  });
+  
+// connection.end();
+
 app.use(express.static('assets'));
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));
