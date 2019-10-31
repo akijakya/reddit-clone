@@ -42,6 +42,20 @@ app.get('/hello', function (req, res) {
     res.send('hello world');
 });
 
+app.get('/posts', function(req, res) {
+    connection.query('SELECT * FROM posts;', function(err, rows) {
+        // console.log(rows);
+        if (err) {
+            console.log(err.toString());
+            res.status(500).send('Database error');
+            return;
+        }
+        res.status(200);
+        res.setHeader("Content-type", "application/json");
+        res.send(rows);
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`The server is up and running on ${PORT}`);
 });
