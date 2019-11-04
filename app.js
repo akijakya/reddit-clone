@@ -63,7 +63,6 @@ app.get('/posts', function(req, res) {
 app.post('/posts', urlencodedParser, function(req, res) {
     connection.query(`INSERT INTO posts (title, url, timestamp) VALUES ('${req.body.title}', '${req.body.url}', NOW());`, function(err, rows) {
         if (err) {
-            console.log(err.toString() + '1');
             res.status(500).send('Database error');
             return;
         }
@@ -72,7 +71,6 @@ app.post('/posts', urlencodedParser, function(req, res) {
 
         connection.query('SELECT * FROM posts WHERE id=(SELECT max(id) FROM posts);', function(err, rows) {
             if (err) {
-                console.log(err.toString() + "2");
                 res.status(500).send('Database error');
                 return;
             }
@@ -83,38 +81,26 @@ app.post('/posts', urlencodedParser, function(req, res) {
     });
 });
 
-// app.post('/posts', jsonParser, (req, res) => {
-//     let inputTitle = req.body.title;
-//     let inputURL = req.body.url;
-//     connection.query(`INSERT INTO ${tableName}
-//       (title, url)
-//       VALUES ('${inputTitle}', '${inputURL}');`
-//       , (err, result) => {
-//         if (err) {
-//           console.error(err);
-//           res.status(500);
-//           res.send(JSON.stringify(err));
-//           return;
-//         };
-//         // a visszakérő Query nem szép, mert duplikátumokat ad
-//         connection.query(`SELECT * FROM ${tableName}
-//         WHERE title = '${inputTitle}' 
-//         AND url = '${inputURL}';`
-//           , (err, result) => {
-//             if (err) {
-//               console.error(err);
-//               res.status(500);
-//               res.send(JSON.stringify(err));
-//               return;
-//             } else {
-//               res.status(200).setHeader('Content-type', 'application/JSON');
-//               res.setHeader('Access-Control-Allow-Origin', '*');
-//               res.setHeader('Accept', 'application/JSON');
-//               res.send(JSON.stringify(result));
-//             }
-//           })
-//       });
-//   });
+app.put('/posts/:id/upvote', function(req, res) {
+    let newScore = connection.query(`SELECT score FROM posts WHERE id = '${req.params.id}';`) + 1;
+    connection.query(`UPDATE posts SET score = '${newScore}' WHERE id = '${req.params.id}';`, function(err, rows) {
+        // console.log(rows);
+        if (err) {
+            console.log(err.toString());
+            res.status(500).send('Database error');
+            return;
+        }
+        // connection.query('SELECT * FROM posts WHERE id=(SELECT max(id) FROM posts);', function(err, rows) {
+        //     if (err) {
+        //         res.status(500).send('Database error');
+        //         return;
+        //     }
+        //     res.status(200);
+        //     res.setHeader("Content-type", "application/json");
+        //     res.send(rows[0]);
+        // });
+    });
+});
 
 app.listen(PORT, () => {
     console.log(`The server is up and running on ${PORT}`);
