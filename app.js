@@ -52,7 +52,7 @@ app.get('/posts', function(req, res) {
         }
         res.status(200);
         res.setHeader("Content-type", "application/json");
-        res.send(rows);
+        res.send({"posts": rows});
     });
 });
 
