@@ -47,8 +47,8 @@ app.get('/hello', function (req, res) {
 });
 
 app.get('/posts', function(req, res) {
-    connection.query('SELECT * FROM posts;', function(err, rows) {
-        // console.log(rows);
+    connection.query('SELECT * FROM posts;', function(err, result) {
+        // console.log(result);
         if (err) {
             console.log(err.toString());
             res.status(500).send('Database error');
@@ -56,12 +56,12 @@ app.get('/posts', function(req, res) {
         }
         res.status(200);
         res.setHeader("Content-type", "application/json");
-        res.send({"posts": rows});
+        res.send({"posts": result});
     });
 });
 
 app.post('/posts', urlencodedParser, function(req, res) {
-    connection.query(`INSERT INTO posts (title, url, timestamp) VALUES ('${req.body.title}', '${req.body.url}', NOW());`, function(err, rows) {
+    connection.query(`INSERT INTO posts (title, url, timestamp) VALUES ('${req.body.title}', '${req.body.url}', NOW());`, function(err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
@@ -69,37 +69,44 @@ app.post('/posts', urlencodedParser, function(req, res) {
         // req.setHeader("Accept", "application/json");
         // req.setHeader("Content-type", "application/json");
 
-        connection.query('SELECT * FROM posts WHERE id=(SELECT max(id) FROM posts);', function(err, rows) {
+        connection.query('SELECT * FROM posts WHERE id=(SELECT max(id) FROM posts);', function(err, result) {
             if (err) {
                 res.status(500).send('Database error');
                 return;
             }
             res.status(200);
             res.setHeader("Content-type", "application/json");
-            res.send(rows[0]);
+            res.send(result[0]);
         });
     });
 });
 
 app.put('/posts/:id/upvote', function(req, res) {
-    let newScore = connection.query(`SELECT score FROM posts WHERE id = '${req.params.id}';`) + 1;
-    connection.query(`UPDATE posts SET score = '${newScore}' WHERE id = '${req.params.id}';`, function(err, rows) {
-        // console.log(rows);
+    connection.query(`SELECT score FROM posts WHERE id = '${req.params.id}';`, function (err, result) {
         if (err) {
             console.log(err.toString());
-            res.status(500).send('Database error');
+            res.status(500).send('Database error 1');
             return;
         }
-        // connection.query('SELECT * FROM posts WHERE id=(SELECT max(id) FROM posts);', function(err, rows) {
-        //     if (err) {
-        //         res.status(500).send('Database error');
-        //         return;
-        //     }
-        //     res.status(200);
-        //     res.setHeader("Content-type", "application/json");
-        //     res.send(rows[0]);
-        // });
+        let newScore = result[0].score + 1;
+        connection.query(`UPDATE posts SET score = '${newScore}' WHERE id = '${req.params.id}';`, function(err, result) {
+            if (err) {
+                console.log(err.toString());
+                res.status(500).send('Database error 2');
+                return;
+            }
+            connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
+                if (err) {
+                    res.status(500).send('Database error 3');
+                    return;
+                }
+                res.status(200);
+                res.setHeader("Content-type", "application/json");
+                res.send(result[0]);
+            });
+        });
     });
+    
 });
 
 app.listen(PORT, () => {
