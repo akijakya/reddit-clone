@@ -106,7 +106,33 @@ app.put('/posts/:id/upvote', function(req, res) {
             });
         });
     });
-    
+});
+
+app.put('/posts/:id/downvote', function(req, res) {
+    connection.query(`SELECT score FROM posts WHERE id = '${req.params.id}';`, function (err, result) {
+        if (err) {
+            console.log(err.toString());
+            res.status(500).send('Database error 1');
+            return;
+        }
+        let newScore = result[0].score - 1;
+        connection.query(`UPDATE posts SET score = '${newScore}' WHERE id = '${req.params.id}';`, function(err, result) {
+            if (err) {
+                console.log(err.toString());
+                res.status(500).send('Database error 2');
+                return;
+            }
+            connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
+                if (err) {
+                    res.status(500).send('Database error 3');
+                    return;
+                }
+                res.status(200);
+                res.setHeader("Content-type", "application/json");
+                res.send(result[0]);
+            });
+        });
+    });
 });
 
 app.listen(PORT, () => {
