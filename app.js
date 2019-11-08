@@ -47,8 +47,8 @@ app.get('/hello', function (req, res) {
 });
 
 app.get('/posts', function(req, res) {
+    console.log(req.headers);
     connection.query('SELECT * FROM posts;', function(err, result) {
-        // console.log(result);
         if (err) {
             console.log(err.toString());
             res.status(500).send('Database error');
@@ -66,9 +66,6 @@ app.post('/posts', urlencodedParser, function(req, res) {
             res.status(500).send('Database error');
             return;
         }
-        // req.setHeader("Accept", "application/json");
-        // req.setHeader("Content-type", "application/json");
-
         connection.query('SELECT * FROM posts WHERE id=(SELECT max(id) FROM posts);', function(err, result) {
             if (err) {
                 res.status(500).send('Database error');
@@ -107,6 +104,24 @@ app.put('/posts/:id/upvote', function(req, res) {
         });
     });
 });
+
+// downVote();
+// async function downVote() {
+//     try {
+//         let response = await fetch ('http://localhost:3000/posts/:id/downvote', {
+//             method: 'PUT',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'Accept': 'application/json'
+//             }
+//         });
+//         let responseJson = await response.json();
+//     } catch (reason) {
+//         console.log(reason);
+//     }
+//     console.log(response);
+//     console.log(responseJson);
+// }
 
 app.put('/posts/:id/downvote', function(req, res) {
     connection.query(`SELECT score FROM posts WHERE id = '${req.params.id}';`, function (err, result) {
