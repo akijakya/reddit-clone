@@ -85,8 +85,7 @@ app.put('/posts/:id/upvote', function(req, res) {
             res.status(500).send('Database error 1');
             return;
         }
-        let newScore = result[0].score + 1;
-        connection.query(`UPDATE posts SET score = '${newScore}' WHERE id = '${req.params.id}';`, function(err, result) {
+        connection.query(`UPDATE posts SET score = score + 1 WHERE id = '${req.params.id}';`, function(err, result) {
             if (err) {
                 console.log(err.toString());
                 res.status(500).send('Database error 2');
@@ -105,41 +104,22 @@ app.put('/posts/:id/upvote', function(req, res) {
     });
 });
 
-// downVote();
-// async function downVote() {
-//     try {
-//         let response = await fetch ('http://localhost:3000/posts/:id/downvote', {
-//             method: 'PUT',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'Accept': 'application/json'
-//             }
-//         });
-//         let responseJson = await response.json();
-//     } catch (reason) {
-//         console.log(reason);
-//     }
-//     console.log(response);
-//     console.log(responseJson);
-// }
-
 app.put('/posts/:id/downvote', function(req, res) {
     connection.query(`SELECT score FROM posts WHERE id = '${req.params.id}';`, function (err, result) {
         if (err) {
             console.log(err.toString());
-            res.status(500).send('Database error 1');
+            res.status(500).send('There is no such post');
             return;
         }
-        let newScore = result[0].score - 1;
-        connection.query(`UPDATE posts SET score = '${newScore}' WHERE id = '${req.params.id}';`, function(err, result) {
+        connection.query(`UPDATE posts SET score = score - 1 WHERE id = '${req.params.id}';`, function(err, result) {
             if (err) {
                 console.log(err.toString());
-                res.status(500).send('Database error 2');
+                res.status(500).send('Problem with updating');
                 return;
             }
             connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
                 if (err) {
-                    res.status(500).send('Database error 3');
+                    res.status(500).send('Problem with displaying the modified post');
                     return;
                 }
                 res.status(200);
