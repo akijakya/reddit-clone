@@ -50,7 +50,6 @@ app.get('/posts', function(req, res) {
     console.log(req.headers);
     connection.query('SELECT * FROM posts;', function(err, result) {
         if (err) {
-            console.log(err.toString());
             res.status(500).send('Database error');
             return;
         }
@@ -63,12 +62,12 @@ app.get('/posts', function(req, res) {
 app.post('/posts', urlencodedParser, function(req, res) {
     connection.query(`INSERT INTO posts (title, url, timestamp) VALUES ('${req.body.title}', '${req.body.url}', NOW());`, function(err, result) {
         if (err) {
-            res.status(500).send('Problem with creating post');
+            res.status(500).send('Database error');
             return;
         }
         connection.query('SELECT * FROM posts WHERE id=(SELECT max(id) FROM posts);', function(err, result) {
             if (err) {
-                res.status(500).send('Problem with displaying post');
+                res.status(500).send('Database error');
                 return;
             }
             res.status(200);
@@ -79,27 +78,23 @@ app.post('/posts', urlencodedParser, function(req, res) {
 });
 
 app.put('/posts/:id/upvote', function(req, res) {
-    connection.query(`SELECT score FROM posts WHERE id = '${req.params.id}';`, function (err, result) {
+    connection.query(`UPDATE posts SET score = score + 1 WHERE id = '${req.params.id}';`, function(err, result) {
         if (err) {
-            console.log(err.toString());
-            res.status(500).send('There is no such post');
+            res.status(500).send('Database error');
             return;
         }
-        connection.query(`UPDATE posts SET score = score + 1 WHERE id = '${req.params.id}';`, function(err, result) {
+        connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
             if (err) {
-                console.log(err.toString());
-                res.status(500).send('Problem with updating');
+                res.status(500).send('Database error');
                 return;
             }
-            connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
-                if (err) {
-                    res.status(500).send('Problem with displaying the modified post');
-                    return;
-                }
-                res.status(200);
-                res.setHeader("Content-type", "application/json");
-                res.send(result[0]);
-            });
+            res.status(200);
+            res.setHeader("Content-type", "application/json");
+            if (result[0] !== undefined) {
+                res.send(result[0]);    
+            } else {
+                res.send('There is no such post');
+            }
         });
     });
 });
@@ -133,27 +128,23 @@ app.put('/posts/:id/upvote', function(req, res) {
 // }
 
 app.put('/posts/:id/downvote', function(req, res) {
-    connection.query(`SELECT score FROM posts WHERE id = '${req.params.id}';`, function (err, result) {
+    connection.query(`UPDATE posts SET score = score - 1 WHERE id = '${req.params.id}';`, function(err, result) {
         if (err) {
-            console.log(err.toString());
-            res.status(500).send('There is no such post');
+            res.status(500).send('Database error');
             return;
         }
-        connection.query(`UPDATE posts SET score = score - 1 WHERE id = '${req.params.id}';`, function(err, result) {
+        connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
             if (err) {
-                console.log(err.toString());
-                res.status(500).send('Problem with updating');
+                res.status(500).send('Database error');
                 return;
             }
-            connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
-                if (err) {
-                    res.status(500).send('Problem with displaying the modified post');
-                    return;
-                }
-                res.status(200);
-                res.setHeader("Content-type", "application/json");
-                res.send(result[0]);
-            });
+            res.status(200);
+            res.setHeader("Content-type", "application/json");
+            if (result[0] !== undefined) {
+                res.send(result[0]);    
+            } else {
+                res.send('There is no such post');
+            }
         });
     });
 });
@@ -171,20 +162,22 @@ app.put('/posts/:id/downvote', function(req, res) {
 app.delete('/posts/:id', function(req, res) {
     connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function (err, result) {
         if (err) {
-            console.log(err.toString());
-            res.status(500).send('There is no such post');
+            res.status(500).send('Database error');
             return;
         }
         connection.query(`DELETE FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
             if (err) {
-                console.log(err.toString());
-                res.status(500).send('Problem with deleting');
+                res.status(500).send('Database error');
                 return;
             }
         });
         res.status(200);
         res.setHeader("Content-type", "application/json");
-        res.send(result[0]);
+        if (result[0] !== undefined) {
+            res.send(result[0]);    
+        } else {
+            res.send('There is no such post');
+        }
     });
 });
 
