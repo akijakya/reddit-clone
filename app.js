@@ -168,6 +168,26 @@ app.put('/posts/:id/downvote', function(req, res) {
 //     });
 // });
 
+app.delete('/posts/:id', function(req, res) {
+    connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function (err, result) {
+        if (err) {
+            console.log(err.toString());
+            res.status(500).send('There is no such post');
+            return;
+        }
+        connection.query(`DELETE FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
+            if (err) {
+                console.log(err.toString());
+                res.status(500).send('Problem with deleting');
+                return;
+            }
+        });
+        res.status(200);
+        res.setHeader("Content-type", "application/json");
+        res.send(result[0]);
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`The server is up and running on ${PORT}`);
 });
