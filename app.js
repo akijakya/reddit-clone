@@ -181,6 +181,28 @@ app.delete('/posts/:id', function(req, res) {
     });
 });
 
+app.put('/posts/:id', urlencodedParser, function(req, res) {
+    connection.query(`UPDATE posts SET title = '${req.body.title}', url = '${req.body.url}' WHERE id = '${req.params.id}';`, function (err, result) {
+        if (err) {
+            res.status(500).send('Database error');
+            return;
+        }
+        connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
+            if (err) {
+                res.status(500).send('Database error');
+                return;
+            }
+            res.status(200);
+            res.setHeader("Content-type", "application/json");
+            if (result[0] !== undefined) {
+                res.send(result[0]);    
+            } else {
+                res.send('There is no such post');
+            }
+        });
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`The server is up and running on ${PORT}`);
 });
