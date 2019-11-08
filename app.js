@@ -5,7 +5,7 @@ const path = require('path');
 
 // requiring bodyParser
 const bodyParser = require('body-parser');
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
+// const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 // requiring express
 const express = require('express');
@@ -22,7 +22,6 @@ const connection = mysql.createConnection({
     user: process.env.DB_USER,
     password: process.env.DB_PASS, 
     database: process.env.DB_NAME,
-    multipleStatements: true
 });
 
 connection.connect(function(err) {
@@ -38,13 +37,17 @@ connection.connect(function(err) {
 app.use(express.static('assets'));
 app.use(bodyParser.json());
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+function selectById (id) {
+    return `SELECT * FROM posts WHERE id = '${id}';`
+}
 
-app.get('/hello', function (req, res) {
-    res.send('hello world');
-});
+// app.get('/', function (req, res) {
+//     res.sendFile(path.join(__dirname, 'index.html'));
+// });
+
+// app.get('/hello', function (req, res) {
+//     res.send('hello world');
+// });
 
 app.get('/posts', function(req, res) {
     console.log(req.headers);
@@ -59,8 +62,8 @@ app.get('/posts', function(req, res) {
     });
 });
 
-app.post('/posts', urlencodedParser, function(req, res) {
-    connection.query(`INSERT INTO posts (title, url, timestamp) VALUES ('${req.body.title}', '${req.body.url}', NOW());`, function(err, result) {
+app.post('/posts', function(req, res) {
+    connection.query(`INSERT INTO posts (title, url, timestamp) VALUES (?, ?, NOW());`, [req.body.title, req.body.url], function(err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
@@ -78,12 +81,12 @@ app.post('/posts', urlencodedParser, function(req, res) {
 });
 
 app.put('/posts/:id/upvote', function(req, res) {
-    connection.query(`UPDATE posts SET score = score + 1 WHERE id = '${req.params.id}';`, function(err, result) {
+    connection.query(`UPDATE posts SET score = score + 1 WHERE id = ?;`, [req.params.id], function(err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
         }
-        connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
+        connection.query(selectById(req.params.id), function(err, result) {
             if (err) {
                 res.status(500).send('Database error');
                 return;
@@ -128,12 +131,12 @@ app.put('/posts/:id/upvote', function(req, res) {
 // }
 
 app.put('/posts/:id/downvote', function(req, res) {
-    connection.query(`UPDATE posts SET score = score - 1 WHERE id = '${req.params.id}';`, function(err, result) {
+    connection.query(`UPDATE posts SET score = score - 1 WHERE id = ?;`, [req.params.id], function(err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
         }
-        connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
+        connection.query(selectById(req.params.id), function(err, result) {
             if (err) {
                 res.status(500).send('Database error');
                 return;
@@ -160,12 +163,12 @@ app.put('/posts/:id/downvote', function(req, res) {
 // });
 
 app.delete('/posts/:id', function(req, res) {
-    connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function (err, result) {
+    connection.query(selectById(req.params.id), function (err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
         }
-        connection.query(`DELETE FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
+        connection.query(`DELETE FROM posts WHERE id = ?;`, [req.params.id], function(err, result) {
             if (err) {
                 res.status(500).send('Database error');
                 return;
@@ -181,13 +184,13 @@ app.delete('/posts/:id', function(req, res) {
     });
 });
 
-app.put('/posts/:id', urlencodedParser, function(req, res) {
-    connection.query(`UPDATE posts SET title = '${req.body.title}', url = '${req.body.url}' WHERE id = '${req.params.id}';`, function (err, result) {
+app.put('/posts/:id', function(req, res) {
+    connection.query(`UPDATE posts SET title = ?, url = ? WHERE id = ?;`, [req.body.title, req.body.url, req.params.id], function (err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
         }
-        connection.query(`SELECT * FROM posts WHERE id = '${req.params.id}';`, function(err, result) {
+        connection.query(selectById(req.params.id), function(err, result) {
             if (err) {
                 res.status(500).send('Database error');
                 return;
