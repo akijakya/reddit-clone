@@ -1,18 +1,24 @@
+:root {
+    --main-font-color: #fbfbfb;
+  }
+
 body {
     margin: 0;
     background-color: #eeeeee;
-    /* display: flex; */
+    display: flex;
+    flex-direction: column;
     height: 100%;
 }
 
 header {
-    display: flex;
+    display: inherit;
     width: 100%;
     height: 30%;
     min-height: 200px;
     background-image: url("banner/bannerBackgroundImage_zdpd5qpvi3f01.jpg");
     background-repeat: no-repeat;
     background-position: center;
+    background-size: auto;
     align-items: center;
     justify-content: center;
 }
@@ -24,7 +30,90 @@ header h1 {
     font-weight: lighter;
     text-transform: uppercase;
     letter-spacing: 70px;
-    color: white;
-    opacity: 0.7;
+    color: var(--main-font-color);
     padding-left: 70px;
+}
+
+content {
+    display: inherit;
+    flex-direction: row;
+    margin: 20px 10px;
+}
+
+posts {
+    width: 60%;
+}
+
+posts ul {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+}
+
+posts li {
+    box-sizing: border-box;
+    background: white;
+    list-style: none;
+    padding: 1%;
+    margin: 1px;
+}
+
+aside {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    margin-left: 10px;
+}
+
+button {
+    margin-bottom: 10px;
+    background: #4aa3df;
+    width: 100%;
+    height: 40px;
+    border: none;
+    outline: none;
+    text-transform: uppercase;
+    color: var(--main-font-color);
+    font-weight: 700;
+    letter-spacing: 3px;
+    /* opacity: 0.8; */
+}
+
+about {
+    display: flex;
+    flex-direction: column;
+    background-color: coral;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#about-title {
+    background: var(--main-font-color);
+}
+
+#about-title h1 {
+    color: #555553;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1em;
+    padding: 0 5%;
+}
+
+#about-title a {
+    text-transform: lowercase;
+    color: #317db3;
+    text-decoration: none;
+}
+
+#about-desc {
+    background: #f5f5f5;
+    color: #525462;
+}
+
+#about-desc p {
+    text-align: center;
+}
+
+#about-desc ul {
+    list-style-type: square;
 }
