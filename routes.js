@@ -3,20 +3,27 @@
 // requiring bodyParser
 const bodyParser = require('body-parser');
 
+// requiring path
+const path = require('path');
+
 // requiring express
 const express = require('express');
 const app = express();
 const connection = require('./db');
 
-app.use(express.static('assets'));
+app.use(express.static('public'));
 app.use(bodyParser.json());
 
 function selectById (id) {
     return `SELECT * FROM posts WHERE id = '${id}';`
 }
 
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, '/public/views/reddit-front.html'));
+    // res.sendFile(path.join(__dirname, '/public/assets/style.css'));
+});
+
 app.get('/posts', function(req, res) {
-    console.log(req.headers);
     connection.query('SELECT * FROM posts;', function(err, result) {
         if (err) {
             res.status(500).send('Database error');
