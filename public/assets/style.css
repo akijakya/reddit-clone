@@ -1,0 +1,13 @@
+body {
+    margin: 0;
+    background-color: #eeeeee;
+}
+
+header {
+    margin: 0;
+    background-image: url("banner/bannerBackgroundImage_zdpd5qpvi3f01.jpg");
+}
+
+header h1 {
+    color: purple;
+}
