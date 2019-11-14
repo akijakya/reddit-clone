@@ -113,6 +113,8 @@ posts li {
     text-decoration: none;
     font-size: 0.6em;
     font-weight: 400;
+    margin-left: 10px;
+    padding-bottom: 2px;
 }
 
 .article-section p {
