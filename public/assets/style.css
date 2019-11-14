@@ -1,13 +1,30 @@
 body {
     margin: 0;
     background-color: #eeeeee;
+    /* display: flex; */
+    height: 100%;
 }
 
 header {
-    margin: 0;
+    display: flex;
+    width: 100%;
+    height: 30%;
+    min-height: 200px;
     background-image: url("banner/bannerBackgroundImage_zdpd5qpvi3f01.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    align-items: center;
+    justify-content: center;
 }
 
 header h1 {
-    color: purple;
+    padding-bottom: 50px;
+    font-family: 'Muli', sans-serif;
+    font-size: 300%;
+    font-weight: lighter;
+    text-transform: uppercase;
+    letter-spacing: 70px;
+    color: white;
+    opacity: 0.7;
+    padding-left: 70px;
 }
