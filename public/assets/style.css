@@ -77,7 +77,18 @@ button {
     color: var(--main-font-color);
     font-weight: 700;
     letter-spacing: 3px;
-    /* opacity: 0.8; */
+}
+
+button:hover {
+    filter: brightness(110%);
+}
+
+button:active {
+    filter: brightness(90%);
+}
+
+button:focus {
+    outline: none;
 }
 
 about {
