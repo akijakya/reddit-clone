@@ -30,7 +30,7 @@ async function loadPosts () {
 }
 
 function createArticle (post) {
-    //building up vote-section
+    // building up vote-section
     let upvote = document.createElement('img');
     upvote.className = 'upvote';
     upvote.src = "../assets/arrows/upvote.png";
@@ -48,7 +48,7 @@ function createArticle (post) {
     voteSection.appendChild(scoreCount);
     voteSection.appendChild(downvote);
 
-    //building up article-section
+    // building up article-section
     let articleLink = document.createElement('a');
     articleLink.className = 'article-link';
     articleLink.href = post.url;
@@ -60,16 +60,34 @@ function createArticle (post) {
 
     let submitted = document.createElement('p');
     let timeDiff = timeDifference(Date.now(), post.timestamp);
-    console.log(timeDiff);
-    submitted.textContent = 'submitted ' + timeDiff + ' by'
+    submitted.textContent = 'submitted ' + timeDiff + ' by '
 
+    let username = document.createElement('a');
+    username.className = 'username';
+    username.textContent = 'anonymus';
+    submitted.appendChild(username);
 
+    // adding update and delete anchor tags
+    let actions = document.createElement('p');
+    actions.className = 'actions';
+    let updatePost = document.createElement('a');
+    updatePost.className = 'update';
+    updatePost.textContent = 'update';
+    let deletePost = document.createElement('a');
+    deletePost.className = 'delete';
+    deletePost.textContent = 'delete';
+
+    actions.appendChild(updatePost);
+    actions.appendChild(deletePost);
+
+    // adding elements to the article-section
     let articleSection = document.createElement('div');
     articleSection.className = 'article-section';
     articleSection.appendChild(title);
     articleSection.appendChild(submitted);
+    articleSection.appendChild(actions);
 
-    //adding the elements to a li and then the ul element
+    // adding the elements to a li and then the ul element
     let newLi = document.createElement('li');
     newLi.appendChild(voteSection);
     newLi.appendChild(articleSection);

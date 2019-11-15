@@ -69,7 +69,7 @@ posts li {
     background: white;
     list-style: none;
     padding: 1%;
-    margin: 1px;
+    margin-bottom: 1px;
 }
 
 .vote-section {
@@ -125,6 +125,10 @@ posts li {
 
 .username {
     color: var(--link-blue);
+}
+
+.delete {
+    margin-left: 5px;
 }
 
 /* ASIDE PART */
