@@ -53,25 +53,28 @@ header h2 {
 /* CONTENT */
 
 content {
-    display: inherit;
+    display: flex;
     flex-direction: row;
     margin: 20px 10px;
 }
 
-/* POSTS PART */
+/* SUBMIT FORM PART */
 
-posts {
+form {
     width: 65%;
+    background: yellow;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 0;
 }
 
+/*
 posts ul {
     display: flex;
     flex-direction: column;
     padding: 0;
     margin: 0;
 }
-
-/* ARTICLES */
 
 posts li {
     display: flex;
@@ -140,7 +143,7 @@ posts li {
 
 .delete {
     margin-left: 5px;
-}
+} */
 
 /* ASIDE PART */
 
