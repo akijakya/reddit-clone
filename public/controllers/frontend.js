@@ -120,17 +120,17 @@ function createArticle (post) {
     username.textContent = 'anonymus';
     submitted.appendChild(username);
 
-    // adding update and delete anchor tags
+    // adding edit and delete anchor tags
     let actions = document.createElement('p');
     actions.className = 'actions';
-    let updatePost = document.createElement('a');
-    updatePost.className = 'update';
-    updatePost.textContent = 'update';
+    let editPost = document.createElement('a');
+    editPost.className = 'edit';
+    editPost.textContent = 'edit';
     let deletePost = document.createElement('a');
     deletePost.className = 'delete';
     deletePost.textContent = 'delete';
 
-    actions.appendChild(updatePost);
+    actions.appendChild(editPost);
     actions.appendChild(deletePost);
 
     // adding elements to the article-section
