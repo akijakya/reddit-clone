@@ -56,94 +56,42 @@ content {
     display: flex;
     flex-direction: row;
     margin: 20px 10px;
+    font-family: 'Muli', sans-serif;
 }
 
 /* SUBMIT FORM PART */
 
 form {
     width: 65%;
-    background: yellow;
+    background: var(--main-light-grey);
     box-sizing: border-box;
-    padding: 10px;
+    padding: 20px;
     margin: 0;
 }
 
-/*
-posts ul {
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    margin: 0;
+#text, #url {
+    width: 100%;
+    background: #eeeeee;
+    border: none;
+    font-size: 20px;
+    outline-color: var(--link-blue);
+    margin-top: 15px;
 }
 
-posts li {
-    display: flex;
-    flex-direction: row;
-    box-sizing: border-box;
-    background: white;
-    list-style: none;
-    padding: 1%;
-    margin-bottom: 1px;
+#text {
+    margin-bottom: 40px;
 }
 
-.vote-section {
-    flex: 0 0 10%;
-    display: flex; 
-    flex-direction: column;
-    padding-top: 10px;
-    box-sizing: border-box;
+#url {
+    height: 1.5em;
 }
 
-.vote-section img {
-    margin: 5px auto;
-}
-
-.vote-section h1 {
-    color: #babbbd;
-    font-family: 'Muli', sans-serif;
+label {
+    color: #555553;
+    text-transform: uppercase;
+    font-weight: 700;
     font-size: 1em;
-    font-weight: 900;
-    padding: 0;
-    margin: 0;
-    text-align: center;
 }
-
-.article-section {
-    flex: 0 0 90%;
-    font-family: 'Muli', sans-serif;
-    padding: 10px 10px 10px 0;
-    box-sizing: border-box;
-}
-
-.article-section h1 {
-    font-size: 1.5em;
-    font-weight: 400;
-    margin: 0 0 10px 0;
-}
-
-.article-link {
-    text-transform: lowercase;
-    color: var(--main-mid-grey);
-    text-decoration: none;
-    font-size: 0.6em;
-    font-weight: 400;
-    margin-left: 10px;
-    padding-bottom: 2px;
-}
-
-.article-section p {
-    color: var(--main-mid-grey);
-    font-size: 0.9em;
-    margin: 0;
-}
-
-.username {
-    color: var(--link-blue);
-}
-
-.delete {
-    margin-left: 5px;
-} */
 
 /* ASIDE PART */
 
@@ -154,7 +102,7 @@ aside {
     margin-left: 10px;
 }
 
-button {
+aside input {
     margin-bottom: 10px;
     background: #4aa3df;
     width: 100%;
