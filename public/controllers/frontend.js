@@ -46,6 +46,19 @@ async function upVote (id) {
         // changing the displayed number
         let scoreNumber = article.getElementsByTagName('h1')[0];
         scoreNumber.textContent = responseJson.score;
+    } else if (arrowUp.src === `${url}/assets/arrows/upvoted.png`) {
+        try {
+            let response = await fetch(`${url}/posts/${id}/downvote`, {
+                method: "PUT"
+            });
+            responseJson = await response.json();
+            arrowUp.src = "../assets/arrows/upvote.png"
+        } catch (reason) {
+            console.log(reason);
+        }
+        // changing the displayed number
+        let scoreNumber = article.getElementsByTagName('h1')[0];
+        scoreNumber.textContent = responseJson.score;
     }
 }
 
@@ -74,6 +87,19 @@ async function downVote (id) {
             console.log(reason);
         }
 
+        // changing the displayed number
+        let scoreNumber = article.getElementsByTagName('h1')[0];
+        scoreNumber.textContent = responseJson.score;
+    } else if (arrowDown.src === `${url}/assets/arrows/downvoted.png`) {
+        try {
+            let response = await fetch(`${url}/posts/${id}/upvote`, {
+                method: "PUT"
+            });
+            responseJson = await response.json();
+            arrowDown.src = "../assets/arrows/downvote.png"
+        } catch (reason) {
+            console.log(reason);
+        }
         // changing the displayed number
         let scoreNumber = article.getElementsByTagName('h1')[0];
         scoreNumber.textContent = responseJson.score;
