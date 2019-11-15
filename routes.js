@@ -36,7 +36,7 @@ app.get('/posts', function(req, res) {
 });
 
 app.post('/posts', function(req, res) {
-    connection.query(`INSERT INTO posts (title, url, timestamp) VALUES (?, ?, NOW());`, [req.body.title, req.body.url], function(err, result) {
+    connection.query(`INSERT INTO posts (title, url, timestamp) VALUES (?, ?, ?);`, [req.body.title, req.body.url, Date.now()], function(err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
