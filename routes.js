@@ -18,9 +18,14 @@ function selectById (id) {
     return `SELECT * FROM posts WHERE id = '${id}';`
 }
 
+// loading landing page
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '/public/views/reddit-front.html'));
-    // res.sendFile(path.join(__dirname, '/public/assets/style.css'));
+});
+
+// loading submit page
+app.get('/submit', function (req, res) {
+    res.sendFile(path.join(__dirname, '/public/views/reddit-front-submit.html'));
 });
 
 app.get('/posts', function(req, res) {
