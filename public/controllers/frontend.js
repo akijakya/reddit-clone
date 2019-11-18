@@ -1,8 +1,5 @@
 'use strict';
 
-let upVoted = false;
-let downVoted = false;
-
 let url = 'http://localhost:3000';
 
 async function loadPosts () {
