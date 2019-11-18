@@ -23,6 +23,7 @@ submitForm.addEventListener ('submit', async function (e) {
         })
         let responseJson = await response.json();
         // console.log(responseJson);
+        window.location.assign('/');
     } catch (reason) {
         console.log(reason);
     }
