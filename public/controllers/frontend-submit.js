@@ -23,7 +23,10 @@ submitForm.addEventListener ('submit', async function (e) {
         })
         let responseJson = await response.json();
         // console.log(responseJson);
-        window.location.assign('/');
+        const submitButton = document.getElementsByTagName('aside')[0].getElementsByTagName('button')[0];
+        submitButton.className = 'clicked';
+        submitButton.textContent = 'Success!';
+        setTimeout(() => window.location.assign('/'), 1000);
     } catch (reason) {
         console.log(reason);
     }

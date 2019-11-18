@@ -2,7 +2,7 @@
 
 let url = 'http://localhost:3000';
 
-
+// submit a new post button click event
 let submitButton = document.getElementsByTagName('aside')[0].getElementsByTagName('button')[0];
 submitButton.addEventListener('click', () => window.location.assign('submit'));
 
