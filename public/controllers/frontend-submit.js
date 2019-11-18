@@ -22,7 +22,7 @@ submitForm.addEventListener ('submit', async function (e) {
             }
         })
         let responseJson = await response.json();
-        console.log(responseJson);
+        // console.log(responseJson);
     } catch (reason) {
         console.log(reason);
     }
