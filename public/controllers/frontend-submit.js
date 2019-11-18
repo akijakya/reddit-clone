@@ -3,33 +3,17 @@
 const url = 'http://localhost:3000';
 const submitForm = document.forms['submit-article'];
 
-submitForm.addEventListener ('submit', function (e) {
+submitForm.addEventListener ('submit', async function (e) {
     e.preventDefault();    // mivel a default behavior hogy ilyenkor újratölti az oldalt, de mi ezt most nem akarjuk
-    const title = submitForm.querySelector('textarea[type="text"]').value ; // az érték amit bevittek a mezőbe
-    const url = submitForm.querySelector('input[type="url"]').value;
+    const articleTitle = submitForm.querySelector('textarea[type="text"]').value ; // az érték amit bevittek a mezőbe
+    const articleUrl = submitForm.querySelector('input[type="url"]').value;
     const data = {
-        "title": title,
-        "url": url
+        "title": articleTitle,
+        "url": articleUrl
     };
     
-    console.log(data);
-
-    // fetch (`${url}/posts/`, {
-    //         method: "POST",
-    //         body: JSON.stringify(data),
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Accept': 'application/json'
-    //         }
-    //     })
-    //     .then((response) => {
-    //         console.log(response);
-    //         response.json().then((responseJson) => {
-    //             console.log(responseJson);
-    //         });
-    //     });
     try {
-        let response = fetch(`${url}/posts/`, {
+        let response = await fetch(`${url}/posts/`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -37,7 +21,7 @@ submitForm.addEventListener ('submit', function (e) {
                 'Accept': 'application/json'
             }
         })
-        let responseJson = response.json();
+        let responseJson = await response.json();
         console.log(responseJson);
     } catch (reason) {
         console.log(reason);
