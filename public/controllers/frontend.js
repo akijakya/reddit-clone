@@ -2,6 +2,10 @@
 
 let url = 'http://localhost:3000';
 
+
+let submitButton = document.getElementsByTagName('aside')[0].getElementsByTagName('button')[0];
+submitButton.addEventListener('click', () => window.location.assign('submit'));
+
 async function loadPosts () {
     let responseJson = {};
 
