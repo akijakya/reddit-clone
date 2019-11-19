@@ -138,8 +138,21 @@ posts li {
     color: var(--link-blue);
 }
 
+.edit, .delete {
+    text-decoration: none;
+    color: var(--link-blue);
+}
+
+.edit:hover {
+    color: #3cb879;
+}
+
 .delete {
     margin-left: 5px;
+}
+
+.delete:hover {
+    color: red;
 }
 
 /* ASIDE PART */
