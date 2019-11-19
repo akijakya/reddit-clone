@@ -28,6 +28,11 @@ app.get('/submit', function (req, res) {
     res.sendFile(path.join(__dirname, '/public/views/reddit-front-submit.html'));
 });
 
+// loading edit view
+app.get('/:id/edit', function (req, res) {
+    res.sendFile(path.join(__dirname, '/public/views/reddit-front-edit.html'));
+});
+
 app.get('/posts', function(req, res) {
     connection.query('SELECT * FROM posts;', function(err, result) {
         if (err) {
@@ -37,6 +42,18 @@ app.get('/posts', function(req, res) {
         res.status(200);
         res.setHeader("Content-type", "application/json");
         res.send({"posts": result});
+    });
+});
+
+app.get('/posts/:id', function(req, res) {
+    connection.query('SELECT * FROM posts WHERE id=?;', [req.params.id], function(err, result) {
+        if (err) {
+            res.status(500).send('Database error');
+            return;
+        }
+        res.status(200);
+        res.setHeader("Content-type", "application/json");
+        res.send(result[0]);
     });
 });
 
