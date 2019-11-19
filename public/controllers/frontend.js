@@ -107,6 +107,18 @@ async function downVote (id) {
     }
 }
 
+async function deletePost (id) {
+    let responseJson = {};
+    try {
+        let response = await fetch(`${url}/posts/${id}`, {
+            method: "DELETE"
+        });
+        responseJson = await response.json();
+    } catch (reason) {
+        console.log(reason);
+    }
+}
+
 function createArticle (post) {
     // building up vote-section
     let upvote = document.createElement('img');
@@ -157,6 +169,8 @@ function createArticle (post) {
     let deletePost = document.createElement('a');
     deletePost.className = 'delete';
     deletePost.textContent = 'delete';
+    deletePost.setAttribute('onclick', `deletePost(${post.id});`);
+    deletePost.setAttribute('href', `${url}/`);
 
     actions.appendChild(editPost);
     actions.appendChild(deletePost);
