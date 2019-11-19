@@ -1,0 +1,43 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reddit</title>
+    <link rel="stylesheet" href="../assets/style-submit.css">
+    <link href="https://fonts.googleapis.com/css?family=Muli:200,400,900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Space</h1>
+        <h2>Post to /r/space</h2>
+    </header>
+    <content>
+        <form id='edit-article'>
+            <label for="text">title</label><br/>
+            <textarea type="text" id="text" name="text" rows="3" required></textarea><br/>
+            <label for="url">URL</label><br/>
+            <input type="url" id="url" name="url" required/>
+        </form>
+        <aside>
+            <button type='submit' form='edit-article'>Submit</button>
+            <about>
+                <div id="about-title">
+                    <h1>About<span><a href="http://localhost:3000/"> r/space</a></span></h1>
+                </div>
+                <div id="about-desc">
+                    <p>Share & discuss informative content on:</>
+                    <ul>
+                        <li>Astrophysics</li>
+                        <li>Cosmology</li>
+                        <li>Space Exploration</li>
+                        <li>Planetary Science</li>
+                        <li>Astrobiology</li>
+                    </ul>
+                </div>
+            </about>
+        </aside>
+    </content>
+    <script src="../controllers/frontend-edit.js"></script>
+</body>
+</html>
