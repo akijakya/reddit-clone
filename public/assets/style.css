@@ -53,7 +53,7 @@ header h2 {
 /* CONTENT */
 
 content {
-    display: inherit;
+    display: flex;
     flex-direction: row;
     margin: 20px 10px;
 }
@@ -81,7 +81,21 @@ posts li {
     list-style: none;
     padding: 1%;
     margin-bottom: 1px;
+    animation-duration: 1s;
+    animation-name: slidein;
 }
+
+@keyframes slidein {
+    from {
+      margin-top: 100%;
+      width: 100%; 
+    }
+  
+    to {
+      margin-top: 0%;
+      width: 100%;
+    }
+  }
 
 .vote-section {
     flex: 0 0 10%;
@@ -224,4 +238,24 @@ about {
 
 #about-desc ul {
     list-style-type: square;
+}
+
+/* mobile view */
+@media screen and (max-width: 700px){
+    content {
+        display: flex;
+        flex-direction: column-reverse;
+        margin: 20px 10px;
+    }
+
+    header {
+        min-width: 440px;
+    }
+
+    posts, aside {
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+        min-width: 400px;
+    }
 }
