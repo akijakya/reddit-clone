@@ -13,6 +13,16 @@ body {
     height: 100%;
 }
 
+/* hiding the scrollbar for Firefox */
+#element {
+    scrollbar-width: none;
+}
+
+/* hiding the scrollbar for Chrome */
+::-webkit-scrollbar {
+    display: none;
+}
+
 /* HEADER */
 
 header {
@@ -56,12 +66,34 @@ content {
     display: flex;
     flex-direction: row;
     margin: 20px 10px;
+    font-family: 'Muli', sans-serif;
 }
+
+.hidden {
+    visibility: hidden;
+    /* animation-duration: 1s;
+    animation-name: slideout; */
+}
+
+/* @keyframes slideout {
+    from {
+      margin-top: 0%;
+      width: 100%; 
+    }
+  
+    to {
+      margin-top: -100%;
+      width: 100%;
+    }
+} */
 
 /* POSTS PART */
 
 posts {
     width: 65%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 posts ul {
@@ -95,7 +127,7 @@ posts li {
       margin-top: 0%;
       width: 100%;
     }
-  }
+}
 
 .vote-section {
     flex: 0 0 10%;
@@ -169,6 +201,39 @@ posts li {
     color: red;
 }
 
+/* SUBMIT FORM PART */
+
+form {
+    background: var(--main-light-grey);
+    box-sizing: border-box;
+    padding: 20px;
+    margin: 0;
+}
+
+#text, #url {
+    width: 100%;
+    background: #eeeeee;
+    border: none;
+    font-size: 20px;
+    outline-color: var(--link-blue);
+    margin-top: 15px;
+}
+
+#text {
+    margin-bottom: 40px;
+}
+
+#url {
+    height: 1.5em;
+}
+
+label {
+    color: #555553;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1em;
+}
+
 /* ASIDE PART */
 
 aside {
@@ -201,6 +266,19 @@ button:active {
 
 button:focus {
     outline: none;
+}
+
+.clicked {
+    margin-bottom: 10px;
+    background: #3cb879;
+    width: 100%;
+    height: 40px;
+    border: none;
+    outline: none;
+    text-transform: uppercase;
+    color: var(--main-light-grey);
+    font-weight: 700;
+    letter-spacing: 3px;
 }
 
 about {

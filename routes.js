@@ -20,7 +20,10 @@ function selectById (id) {
 
 // loading landing page
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '/public/views/reddit-front.html'));
+    // original page with three different html files as views:
+    // res.sendFile(path.join(__dirname, '/public/views/reddit-front.html'));
+    //reworked page which only uses DOM manipulation:
+    res.sendFile(path.join(__dirname, '/public/views/reddit-front-mergedviews.html'));
 });
 
 // loading submit page
