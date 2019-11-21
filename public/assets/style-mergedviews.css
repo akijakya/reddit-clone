@@ -206,6 +206,7 @@ posts li {
 form {
     background: var(--main-light-grey);
     box-sizing: border-box;
+    height: 100%;
     padding: 20px;
     margin: 0;
 }
