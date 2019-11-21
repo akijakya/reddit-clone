@@ -1,0 +1,261 @@
+:root {
+    --main-light-grey: #fbfbfb;
+    --main-mid-grey: #9a9698;
+    --main-dark-grey: #525462;
+    --link-blue: #317db3;
+  }
+
+body {
+    margin: 0;
+    background-color: #eeeeee;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* HEADER */
+
+header {
+    display: inherit;
+    flex-direction: column;
+    width: 100%;
+    height: 30%;
+    min-height: 200px;
+    background-image: url("banner/bannerBackgroundImage_zdpd5qpvi3f01.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Muli', sans-serif;
+}
+
+header h1 {
+    padding-bottom: 50px;
+    font-size: 200%;
+    font-weight: lighter;
+    text-transform: uppercase;
+    letter-spacing: 70px;
+    color: var(--main-light-grey);
+    padding-left: 70px;
+    margin: 0;
+}
+
+header h2 {
+    font-size: 100%;
+    font-weight: lighter;
+    text-transform: uppercase;
+    color: var(--main-light-grey);
+    letter-spacing: 3px;
+    margin: 0;
+}
+
+/* CONTENT */
+
+content {
+    display: flex;
+    flex-direction: row;
+    margin: 20px 10px;
+}
+
+/* POSTS PART */
+
+posts {
+    width: 65%;
+}
+
+posts ul {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+}
+
+/* ARTICLES */
+
+posts li {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    background: white;
+    list-style: none;
+    padding: 1%;
+    margin-bottom: 1px;
+    animation-duration: 1s;
+    animation-name: slidein;
+}
+
+@keyframes slidein {
+    from {
+      margin-top: 100%;
+      width: 100%; 
+    }
+  
+    to {
+      margin-top: 0%;
+      width: 100%;
+    }
+  }
+
+.vote-section {
+    flex: 0 0 10%;
+    display: flex; 
+    flex-direction: column;
+    padding-top: 10px;
+    box-sizing: border-box;
+}
+
+.vote-section img {
+    margin: 5px auto;
+}
+
+.vote-section h1 {
+    color: #babbbd;
+    font-family: 'Muli', sans-serif;
+    font-size: 1em;
+    font-weight: 900;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.article-section {
+    flex: 0 0 90%;
+    font-family: 'Muli', sans-serif;
+    padding: 10px 10px 10px 0;
+    box-sizing: border-box;
+}
+
+.article-section h1 {
+    font-size: 1.5em;
+    font-weight: 400;
+    margin: 0 0 10px 0;
+}
+
+.article-link {
+    text-transform: lowercase;
+    color: var(--main-mid-grey);
+    text-decoration: none;
+    font-size: 0.6em;
+    font-weight: 400;
+    margin-left: 10px;
+    padding-bottom: 2px;
+}
+
+.article-section p {
+    color: var(--main-mid-grey);
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.username {
+    color: var(--link-blue);
+}
+
+.edit, .delete {
+    text-decoration: none;
+    color: var(--link-blue);
+}
+
+.edit:hover {
+    color: #3cb879;
+}
+
+.delete {
+    margin-left: 5px;
+}
+
+.delete:hover {
+    color: red;
+}
+
+/* ASIDE PART */
+
+aside {
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    margin-left: 10px;
+}
+
+button {
+    margin-bottom: 10px;
+    background: #4aa3df;
+    width: 100%;
+    height: 40px;
+    border: none;
+    outline: none;
+    text-transform: uppercase;
+    color: var(--main-light-grey);
+    font-weight: 700;
+    letter-spacing: 3px;
+}
+
+button:hover {
+    filter: brightness(110%);
+}
+
+button:active {
+    filter: brightness(90%);
+}
+
+button:focus {
+    outline: none;
+}
+
+about {
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#about-title {
+    background: var(--main-light-grey);
+}
+
+#about-title h1 {
+    color: #555553;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1em;
+    padding: 0 5%;
+}
+
+#about-title a {
+    text-transform: lowercase;
+    color: var(--link-blue);
+    text-decoration: none;
+}
+
+#about-desc {
+    background: #f5f5f5;
+    color: var(--main-dark-grey);
+}
+
+#about-desc p {
+    text-align: center;
+}
+
+#about-desc ul {
+    list-style-type: square;
+}
+
+/* mobile view */
+@media screen and (max-width: 700px){
+    content {
+        display: flex;
+        flex-direction: column-reverse;
+        margin: 20px 10px;
+    }
+
+    header {
+        min-width: 440px;
+    }
+
+    posts, aside {
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+        min-width: 400px;
+    }
+}
