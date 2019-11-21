@@ -203,12 +203,14 @@ posts li {
 
 /* SUBMIT FORM PART */
 
-form {
+#submit-article {
     background: var(--main-light-grey);
     box-sizing: border-box;
     height: 100%;
     padding: 20px;
     margin: 0;
+    animation-duration: 1s;
+    animation-name: slidein;
 }
 
 #text, #url {
@@ -244,7 +246,7 @@ aside {
     margin-left: 10px;
 }
 
-button {
+aside button {
     margin-bottom: 10px;
     background: #4aa3df;
     width: 100%;
@@ -257,15 +259,15 @@ button {
     letter-spacing: 3px;
 }
 
-button:hover {
+aside button:hover {
     filter: brightness(110%);
 }
 
-button:active {
+aside button:active {
     filter: brightness(90%);
 }
 
-button:focus {
+aside button:focus {
     outline: none;
 }
 

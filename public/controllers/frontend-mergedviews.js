@@ -1,6 +1,9 @@
 'use strict';
 
-let url = 'http://localhost:3000';
+const url = 'http://localhost:3000';
+let submitForm = document.getElementsByTagName('form')[0];
+// const submitForm = document.forms['submit-article'];
+let asideSection = document.getElementsByTagName('aside')[0];
 
 async function loadPosts () {
     let responseJson = {};
@@ -14,37 +17,6 @@ async function loadPosts () {
 
     // filling up article section with articles from the database
     responseJson.posts.forEach(e => createArticle(e));
-
-    // building the form
-    // let submitForm = document.getElementById('submit-article');
-    submitForm.hidden = true;
-
-    let titleLabel = document.createElement('label');
-    titleLabel.for = 'text';
-    titleLabel.textContent = 'title';
-
-    let titleField = document.createElement('textarea');
-    titleField.setAttribute ('type', 'text');
-    titleField.id = 'text';
-    titleField.name = 'text';
-    titleField.rows = '3';
-    titleField.required = true;
-
-    let urlLabel = document.createElement('label');
-    urlLabel.for = 'url';
-    urlLabel.textContent = 'url';
-
-    let urlField = document.createElement('input');
-    urlField.setAttribute ('type', 'url');
-    urlField.id = 'url';
-    urlField.name = 'url';
-    urlField.required = true;
-
-    // appending children for the form
-    submitForm.appendChild(titleLabel);
-    submitForm.appendChild(titleField);
-    submitForm.appendChild(urlLabel);
-    submitForm.appendChild(urlField);
 }
 
 async function upVote (id) {
@@ -221,7 +193,6 @@ function createArticle (post) {
 }
 
 function timeDifference(current, previous) {
-
     var msPerMinute = 60 * 1000;
     var msPerHour = msPerMinute * 60;
     var msPerDay = msPerHour * 24;
@@ -245,25 +216,67 @@ function timeDifference(current, previous) {
     }
 }
 
+// SUBMIT FORM VIEW
+
+function buildSubmitForm () {
+    submitForm.hidden = true;
+
+    let titleLabel = document.createElement('label');
+    titleLabel.for = 'text';
+    titleLabel.textContent = 'title';
+
+    let titleField = document.createElement('textarea');
+    titleField.setAttribute ('type', 'text');
+    titleField.id = 'text';
+    titleField.name = 'text';
+    titleField.rows = '3';
+    titleField.required = true;
+
+    let urlLabel = document.createElement('label');
+    urlLabel.for = 'url';
+    urlLabel.textContent = 'url';
+
+    let urlField = document.createElement('input');
+    urlField.setAttribute ('type', 'url');
+    urlField.id = 'url';
+    urlField.name = 'url';
+    urlField.required = true;
+
+    // appending children for the form
+    submitForm.appendChild(titleLabel);
+    submitForm.appendChild(titleField);
+    submitForm.appendChild(urlLabel);
+    submitForm.appendChild(urlField);
+}
+
 // submit a new post button click event
-let submitButton = document.getElementsByTagName('aside')[0].getElementsByTagName('button')[0];
-submitButton.addEventListener('click', () => showSubmitView());
+let newPostButton = asideSection.getElementsByTagName('button')[0];
+newPostButton.addEventListener('click', () => showSubmitView());
 
 function showSubmitView () {
+    // removing posts and new post button
     let posts = document.getElementsByTagName('posts')[0];
     let postList = document.getElementById('article-list');
     // postList.className = 'hidden';
     let removePostList = posts.removeChild(postList);
-    // let submitForm = document.forms['submit-article'];
+    asideSection.removeChild(newPostButton);
+
+    buildSubmitForm();
+
+    submitForm.id = 'submit-article';
     submitForm.hidden = false;
 
-    // changing the button
-    const asideButton = document.getElementsByTagName('aside')[0].getElementsByTagName('button')[0];
-    asideButton.id = 'submit-button';
-    asideButton.textContent = 'Submit!';
-}
+    // adding new button
+    let submitButton = document.createElement('button');
+    submitButton.setAttribute('type', 'submit');
+    submitButton.setAttribute('form', 'submit-article');
+    submitButton.textContent = 'Submit!';
+    asideSection.insertBefore(submitButton, asideSection.firstChild);
 
-let submitForm = document.getElementById('submit-article');
+    // changing the header h2
+    let headerH2 = document.getElementsByTagName('h2')[0];
+    headerH2.textContent = 'Post to /r/space';
+}
 
 submitForm.addEventListener ('submit', async function (e) {
     e.preventDefault();  
@@ -285,7 +298,7 @@ submitForm.addEventListener ('submit', async function (e) {
         })
         let responseJson = await response.json();
         // console.log(responseJson);
-        const submitButton = document.getElementById('submit-button');
+        let submitButton = asideSection.getElementsByTagName('button')[0];
         submitButton.className = 'clicked';
         submitButton.textContent = 'Successfully posted!';
         setTimeout(() => window.location.assign('/'), 1000);
