@@ -161,7 +161,7 @@ function createArticle (post) {
     actions.className = 'actions';
     let editPost = document.createElement('a');
     editPost.className = 'edit';
-    editPost.textContent = 'edit';
+    editPost.textContent = 'modify';
     editPost.setAttribute('onclick', `showEditView(${post.id});`);
     let deletePost = document.createElement('a');
     deletePost.className = 'delete';
