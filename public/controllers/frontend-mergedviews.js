@@ -219,9 +219,39 @@ let submitForm = document.getElementsByTagName('form')[0];
 // const submitForm = document.forms['submit-article'];
 let asideSection = document.getElementsByTagName('aside')[0];
 
-function buildSubmitForm () {
-    submitForm.hidden = true;
+// submit a new post button click event
+let newPostButton = document.getElementById('new-post');
+newPostButton.addEventListener('click', () => showSubmitView());
 
+function showSubmitView () {
+    // removing posts and new post button
+    let posts = document.getElementsByTagName('posts')[0];
+    let postList = document.getElementById('article-list');
+    // postList.className = 'hidden';
+    let removePostList = posts.removeChild(postList);
+    asideSection.removeChild(newPostButton);
+
+    buildSubmitForm();
+
+    submitForm.id = 'submit-article';
+    submitForm.hidden = false;
+
+    newPostEventListener();
+
+    // adding new button
+    let submitButton = document.createElement('button');
+    submitButton.id = 'submit-button';
+    submitButton.setAttribute('type', 'submit');
+    submitButton.setAttribute('form', 'submit-article');
+    submitButton.textContent = 'Submit!';
+    asideSection.insertBefore(submitButton, asideSection.firstChild);
+
+    // changing the header h2
+    let headerH2 = document.getElementsByTagName('h2')[0];
+    headerH2.textContent = 'Post to /r/space';
+}
+
+function buildSubmitForm () {
     let titleLabel = document.createElement('label');
     titleLabel.for = 'text';
     titleLabel.textContent = 'title';
@@ -250,11 +280,44 @@ function buildSubmitForm () {
     submitForm.appendChild(urlField);
 }
 
-// submit a new post button click event
-let newPostButton = asideSection.getElementsByTagName('button')[0];
-newPostButton.addEventListener('click', () => showSubmitView(newPostEventListener));
+function newPostEventListener () {
+    submitForm.addEventListener ('submit', async function (e) {
+        e.preventDefault();  
+        const articleTitle = submitForm.querySelector('textarea[type="text"]').value ;
+        const articleUrl = submitForm.querySelector('input[type="url"]').value;
+        const data = {
+            "title": articleTitle,
+            "url": articleUrl
+        };
+        
+        try {
+            let response = await fetch(`${url}/posts/`, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            let responseJson = await response.json();
+            // console.log(responseJson);
+            let submitButton = asideSection.getElementsByTagName('button')[0];
+            submitButton.className = 'clicked';
+            submitButton.textContent = 'Successfully posted!';
+            setTimeout(() => window.location.assign('/'), 1000);
+        } catch (reason) {
+            console.log(reason);
+        }
+    });
+}
 
-function showSubmitView (eventListener) {
+// EDIT FORM VIEW
+
+let passedId = 0;
+
+function showEditView (id) {
+    passedId = id;
+
     // removing posts and new post button
     let posts = document.getElementsByTagName('posts')[0];
     let postList = document.getElementById('article-list');
@@ -263,91 +326,56 @@ function showSubmitView (eventListener) {
     asideSection.removeChild(newPostButton);
 
     buildSubmitForm();
+    fillContent();
 
-    submitForm.id = 'submit-article';
+    submitForm.id = 'edit-article';
     submitForm.hidden = false;
 
-    eventListener;
+    editEventListener();
 
     // adding new button
     let submitButton = document.createElement('button');
+    submitButton.id = 'submit-button';
     submitButton.setAttribute('type', 'submit');
-    submitButton.setAttribute('form', 'submit-article');
-    submitButton.textContent = 'Submit!';
+    submitButton.setAttribute('form', 'edit-article');
+    submitButton.textContent = 'Save changes';
     asideSection.insertBefore(submitButton, asideSection.firstChild);
 
     // changing the header h2
     let headerH2 = document.getElementsByTagName('h2')[0];
-    headerH2.textContent = 'Post to /r/space';
+    headerH2.textContent = `Edit post #${passedId}`;
 }
 
-const newPostEventListener = submitForm.addEventListener ('submit', async function (e) {
-    e.preventDefault();  
-    const articleTitle = submitForm.querySelector('textarea[type="text"]').value ;
-    const articleUrl = submitForm.querySelector('input[type="url"]').value;
-    const data = {
-        "title": articleTitle,
-        "url": articleUrl
-    };
-    
-    try {
-        let response = await fetch(`${url}/posts/`, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-        let responseJson = await response.json();
-        // console.log(responseJson);
-        let submitButton = asideSection.getElementsByTagName('button')[0];
-        submitButton.className = 'clicked';
-        submitButton.textContent = 'Successfully posted!';
-        setTimeout(() => window.location.assign('/'), 1000);
-    } catch (reason) {
-        console.log(reason);
-    }
-});
-
-// EDIT FORM VIEW
-
-let passedId = 0;
-
-function showEditView (id) {
-    passedId = id;
-    showSubmitView(editEventListener);
-    fillContent();
+function editEventListener () {
+    submitForm.addEventListener ('submit', async function (e) {
+        e.preventDefault();
+        const articleTitle = submitForm.querySelector('textarea[type="text"]').value ;
+        const articleUrl = submitForm.querySelector('input[type="url"]').value;
+        const data = {
+            "title": articleTitle,
+            "url": articleUrl
+        };
+        
+        try {
+            let response = await fetch(`${url}/posts/${passedId}`, {
+                method: "PUT",
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            let responseJson = await response.json();
+            // console.log(responseJson);
+            const submitButton = document.getElementsByTagName('aside')[0].getElementsByTagName('button')[0];
+            submitButton.className = 'clicked';
+            submitButton.textContent = 'Successfully edited!';
+            setTimeout(() => window.location.assign('/'), 1000);
+        } catch (reason) {
+            console.log(reason);
+        }
+    });
 }
-
-const editEventListener = submitForm.addEventListener ('submit', async function (e) {
-    e.preventDefault();
-    const articleTitle = submitForm.querySelector('textarea[type="text"]').value ;
-    const articleUrl = submitForm.querySelector('input[type="url"]').value;
-    const data = {
-        "title": articleTitle,
-        "url": articleUrl
-    };
-    
-    try {
-        let response = await fetch(`${url}/posts/${passedId}`, {
-            method: "PUT",
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-        let responseJson = await response.json();
-        // console.log(responseJson);
-        const submitButton = document.getElementsByTagName('aside')[0].getElementsByTagName('button')[0];
-        submitButton.className = 'clicked';
-        submitButton.textContent = 'Successfully edited!';
-        setTimeout(() => window.location.assign('/'), 1000);
-    } catch (reason) {
-        console.log(reason);
-    }
-});
 
 async function fillContent () {
     try {
