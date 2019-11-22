@@ -1,9 +1,6 @@
 'use strict';
 
 const url = 'http://localhost:3000';
-let submitForm = document.getElementsByTagName('form')[0];
-// const submitForm = document.forms['submit-article'];
-let asideSection = document.getElementsByTagName('aside')[0];
 
 async function loadPosts () {
     let responseJson = {};
@@ -165,7 +162,7 @@ function createArticle (post) {
     let editPost = document.createElement('a');
     editPost.className = 'edit';
     editPost.textContent = 'edit';
-    editPost.setAttribute('href', `${url}/${post.id}/edit`);
+    editPost.setAttribute('onclick', `showEditView(${post.id});`);
     let deletePost = document.createElement('a');
     deletePost.className = 'delete';
     deletePost.textContent = 'delete';
@@ -218,6 +215,10 @@ function timeDifference(current, previous) {
 
 // SUBMIT FORM VIEW
 
+let submitForm = document.getElementsByTagName('form')[0];
+// const submitForm = document.forms['submit-article'];
+let asideSection = document.getElementsByTagName('aside')[0];
+
 function buildSubmitForm () {
     submitForm.hidden = true;
 
@@ -251,9 +252,9 @@ function buildSubmitForm () {
 
 // submit a new post button click event
 let newPostButton = asideSection.getElementsByTagName('button')[0];
-newPostButton.addEventListener('click', () => showSubmitView());
+newPostButton.addEventListener('click', () => showSubmitView(newPostEventListener));
 
-function showSubmitView () {
+function showSubmitView (eventListener) {
     // removing posts and new post button
     let posts = document.getElementsByTagName('posts')[0];
     let postList = document.getElementById('article-list');
@@ -265,6 +266,8 @@ function showSubmitView () {
 
     submitForm.id = 'submit-article';
     submitForm.hidden = false;
+
+    eventListener;
 
     // adding new button
     let submitButton = document.createElement('button');
@@ -278,7 +281,7 @@ function showSubmitView () {
     headerH2.textContent = 'Post to /r/space';
 }
 
-submitForm.addEventListener ('submit', async function (e) {
+const newPostEventListener = submitForm.addEventListener ('submit', async function (e) {
     e.preventDefault();  
     const articleTitle = submitForm.querySelector('textarea[type="text"]').value ;
     const articleUrl = submitForm.querySelector('input[type="url"]').value;
@@ -306,5 +309,59 @@ submitForm.addEventListener ('submit', async function (e) {
         console.log(reason);
     }
 });
+
+// EDIT FORM VIEW
+
+let passedId = 0;
+
+function showEditView (id) {
+    passedId = id;
+    showSubmitView(editEventListener);
+    fillContent();
+}
+
+const editEventListener = submitForm.addEventListener ('submit', async function (e) {
+    e.preventDefault();
+    const articleTitle = submitForm.querySelector('textarea[type="text"]').value ;
+    const articleUrl = submitForm.querySelector('input[type="url"]').value;
+    const data = {
+        "title": articleTitle,
+        "url": articleUrl
+    };
+    
+    try {
+        let response = await fetch(`${url}/posts/${passedId}`, {
+            method: "PUT",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        let responseJson = await response.json();
+        // console.log(responseJson);
+        const submitButton = document.getElementsByTagName('aside')[0].getElementsByTagName('button')[0];
+        submitButton.className = 'clicked';
+        submitButton.textContent = 'Successfully edited!';
+        setTimeout(() => window.location.assign('/'), 1000);
+    } catch (reason) {
+        console.log(reason);
+    }
+});
+
+async function fillContent () {
+    try {
+        let response = await fetch(`${url}/posts/${passedId}`, {
+            method: "GET"
+        })
+        let responseJson = await response.json();
+        const articleTitle = submitForm.querySelector('textarea[type="text"]');
+        const articleUrl = submitForm.querySelector('input[type="url"]');
+        articleTitle.value = responseJson.title;
+        articleUrl.value = responseJson.url;
+    } catch (reason) {
+        console.log(reason);
+    }
+}
 
 window.onload = loadPosts;
