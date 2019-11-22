@@ -48,8 +48,9 @@ app.get('/posts', function(req, res) {
     });
 });
 
+// this is only needed when three different html pages are used as views:
 app.get('/posts/:id', function(req, res) {
-    connection.query('SELECT * FROM posts WHERE id=?;', [req.params.id], function(err, result) {
+    connection.query(selectById(req.params.id), function(err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
@@ -60,6 +61,7 @@ app.get('/posts/:id', function(req, res) {
     });
 });
 
+// submitting new post
 app.post('/posts', function(req, res) {
     connection.query(`INSERT INTO posts (title, url, timestamp) VALUES (?, ?, ?);`, [req.body.title, req.body.url, Date.now()], function(err, result) {
         if (err) {
@@ -78,6 +80,7 @@ app.post('/posts', function(req, res) {
     });
 });
 
+// upvote, downvote
 app.put('/posts/:id/upvote', function(req, res) {
     connection.query(`UPDATE posts SET score = score + 1 WHERE id = ?;`, [req.params.id], function(err, result) {
         if (err) {
@@ -122,6 +125,7 @@ app.put('/posts/:id/downvote', function(req, res) {
     });
 });
 
+// deleting post
 app.delete('/posts/:id', function(req, res) {
     connection.query(selectById(req.params.id), function (err, result) {
         if (err) {
@@ -144,6 +148,7 @@ app.delete('/posts/:id', function(req, res) {
     });
 });
 
+// editing post
 app.put('/posts/:id', function(req, res) {
     connection.query(`UPDATE posts SET title = ?, url = ? WHERE id = ?;`, [req.body.title, req.body.url, req.params.id], function (err, result) {
         if (err) {
