@@ -165,7 +165,7 @@ function createArticle (post) {
     let editPost = document.createElement('a');
     editPost.className = 'edit';
     editPost.textContent = 'edit';
-    editPost.setAttribute('href', `${url}/${post.id}/edit`);
+    editPost.setAttribute('href', `${url}/edit?id=${post.id}`);
     let deletePost = document.createElement('a');
     deletePost.className = 'delete';
     deletePost.textContent = 'delete';

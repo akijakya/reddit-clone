@@ -4,7 +4,9 @@ const url = 'http://localhost:3000';
 const editForm = document.forms['edit-article'];
 
 // getting the id of the post passed through the address bar
-const passedId = window.location.pathname.substring(1, 3);
+// const passedId = window.location.pathname.substring(1, 3);
+let params = new URLSearchParams(document.location.search.substring(1));
+let passedId = params.get('id');
 
 // modifying caption in the header
 let headerCaption = document.getElementsByTagName('h2')[0];
