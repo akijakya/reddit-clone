@@ -203,7 +203,7 @@ posts li {
 
 /* SUBMIT FORM PART */
 
-#submit-article {
+#submit-article, #edit-article {
     background: var(--main-light-grey);
     box-sizing: border-box;
     height: 100%;
