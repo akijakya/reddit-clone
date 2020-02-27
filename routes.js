@@ -15,7 +15,7 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 
 function selectById (id) {
-    return `SELECT * FROM reddit-posts WHERE id = '${id}';`
+    return `SELECT * FROM redditposts WHERE id = '${id}';`
 }
 
 // loading landing page
@@ -37,7 +37,7 @@ app.get('/edit', function (req, res) {
 });
 
 app.get('/posts', function(req, res) {
-    connection.query('SELECT * FROM reddit-posts;', function(err, result) {
+    connection.query('SELECT * FROM redditposts;', function(err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
@@ -63,12 +63,12 @@ app.get('/posts/:id', function(req, res) {
 
 // submitting new post
 app.post('/posts', function(req, res) {
-    connection.query(`INSERT INTO reddit-posts (title, url, timestamp) VALUES (?, ?, ?);`, [req.body.title, req.body.url, Date.now()], function(err, result) {
+    connection.query(`INSERT INTO redditposts (title, url, timestamp) VALUES (?, ?, ?);`, [req.body.title, req.body.url, Date.now()], function(err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
         }
-        connection.query('SELECT * FROM reddit-posts WHERE id=(SELECT max(id) FROM reddit-posts);', function(err, result) {
+        connection.query('SELECT * FROM redditposts WHERE id=(SELECT max(id) FROM redditposts);', function(err, result) {
             if (err) {
                 res.status(500).send('Database error');
                 return;
@@ -82,7 +82,7 @@ app.post('/posts', function(req, res) {
 
 // upvote, downvote
 app.put('/posts/:id/upvote', function(req, res) {
-    connection.query(`UPDATE reddit-posts SET score = score + 1 WHERE id = ?;`, [req.params.id], function(err, result) {
+    connection.query(`UPDATE redditposts SET score = score + 1 WHERE id = ?;`, [req.params.id], function(err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
@@ -104,7 +104,7 @@ app.put('/posts/:id/upvote', function(req, res) {
 });
 
 app.put('/posts/:id/downvote', function(req, res) {
-    connection.query(`UPDATE reddit-posts SET score = score - 1 WHERE id = ?;`, [req.params.id], function(err, result) {
+    connection.query(`UPDATE redditposts SET score = score - 1 WHERE id = ?;`, [req.params.id], function(err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
@@ -132,7 +132,7 @@ app.delete('/posts/:id', function(req, res) {
             res.status(500).send('Database error');
             return;
         }
-        connection.query(`DELETE FROM reddit-posts WHERE id = ?;`, [req.params.id], function(err, result) {
+        connection.query(`DELETE FROM redditposts WHERE id = ?;`, [req.params.id], function(err, result) {
             if (err) {
                 res.status(500).send('Database error');
                 return;
@@ -150,7 +150,7 @@ app.delete('/posts/:id', function(req, res) {
 
 // editing post
 app.put('/posts/:id', function(req, res) {
-    connection.query(`UPDATE reddit-posts SET title = ?, url = ? WHERE id = ?;`, [req.body.title, req.body.url, req.params.id], function (err, result) {
+    connection.query(`UPDATE redditposts SET title = ?, url = ? WHERE id = ?;`, [req.body.title, req.body.url, req.params.id], function (err, result) {
         if (err) {
             res.status(500).send('Database error');
             return;
