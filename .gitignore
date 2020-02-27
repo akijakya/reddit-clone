@@ -2,4 +2,4 @@ node_modules
 .env
 posts.txt
 old
-config.js
+# config.js
