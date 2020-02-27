@@ -1,0 +1,10 @@
+language: go
+
+go:
+- "1.14"
+
+deploy:
+    provider: heroku
+    api_key: ...
+    on:
+      branch: gobackend
