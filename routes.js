@@ -21,19 +21,9 @@ function selectById (id) {
 // loading landing page
 app.get('/', function (req, res) {
     // original page with three different html files as views:
-    res.sendFile(path.join(__dirname, '/public/views/reddit-front.html'));
+    // res.sendFile(path.join(__dirname, '/public/views/reddit-front.html'));
     //reworked page which only uses DOM manipulation:
-    // res.sendFile(path.join(__dirname, '/public/views/reddit-front-mergedviews.html'));
-});
-
-// loading submit page
-app.get('/submit', function (req, res) {
-    res.sendFile(path.join(__dirname, '/public/views/reddit-front-submit.html'));
-});
-
-// loading edit view
-app.get('/edit', function (req, res) {
-    res.sendFile(path.join(__dirname, '/public/views/reddit-front-edit.html'));
+    res.sendFile(path.join(__dirname, '/public/views/reddit-front-mergedviews.html'));
 });
 
 app.get('/posts', function(req, res) {
