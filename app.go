@@ -3,18 +3,23 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 )
 
-func static(w http.ResponseWriter, r *http.Request) {
-	// filename := r.URL.Path[1:]
-	// if filename == "" {
-	// 	filename = "reddit-front.html"
-	// } else if filename[:6] != "flotr/" {
-	// 	http.NotFound(w, r)
-	// 	return
-	// }
-	// http.ServeFile(w, r, "public/views/"+filename)
-	http.ServeFile(w, r, "public/views/reddit-front.html")
+func static(w http.ResponseWriter, req *http.Request) {
+	if req.Method == "GET" {
+		log.Printf("Serving up path %s", req.URL.Path)
+		if req.URL.Path == "/" {
+			log.Printf("...redirecting to the front page")
+			// serving our front page html
+			http.ServeFile(w, req, "public/views/reddit-front.html")
+		} else {
+			// this part is necessary for serving the css, js etc. for the html
+			http.ServeFile(w, req, "public/"+req.URL.Path)
+		}
+	} else {
+		w.WriteHeader(400)
+	}
 }
 
 func posts(w http.ResponseWriter, r *http.Request) {
@@ -41,10 +46,12 @@ func posts(w http.ResponseWriter, r *http.Request) {
 func main() {
 	PORT := 3000
 
-	fs := http.FileServer(http.Dir("public"))
-	http.Handle("/public/", http.StripPrefix("/public/", fs))
-	http.HandleFunc("/", static)
+	// fs := http.FileServer(http.Dir("public"))
+	// http.Handle("/public/", http.StripPrefix("/public/", fs))
 
-	log.Println("Listening to port", PORT)
-	http.ListenAndServe(":3000", nil)
+	http.HandleFunc("/", static)
+	http.HandleFunc("/posts", posts)
+
+	log.Printf("Listening to port %v", PORT)
+	http.ListenAndServe(":"+strconv.Itoa(PORT), nil)
 }
