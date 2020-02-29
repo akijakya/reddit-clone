@@ -1,12 +1,43 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
-	"strconv"
+	"os"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/joho/godotenv"
 )
 
-func static(w http.ResponseWriter, req *http.Request) {
+var db *gorm.DB //database
+
+func init() {
+	// loads values from .env into the system
+	if err := godotenv.Load(); err != nil {
+		log.Print("No .env file found")
+	}
+
+	username := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASS")
+	dbName := os.Getenv("DB_NAME")
+	dbHost := os.Getenv("DB_HOST")
+
+	// string example to connect to a mysql database:
+	// user:password@(localhost)/dbname?charset=utf8&parseTime=True&loc=Local
+	dbURI := fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8&parseTime=True&loc=Local", username, password, dbHost, dbName) //Build connection string
+	fmt.Println(dbURI)
+
+	conn, err := gorm.Open("mysql", dbURI)
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	db = conn
+}
+
+func front(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "GET" {
 		log.Printf("Serving up path %s", req.URL.Path)
 		if req.URL.Path == "/" {
@@ -43,15 +74,59 @@ func posts(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func main() {
-	PORT := 3000
+// Get path to static assets directory from env variable
+var staticAssetsDir = os.Getenv("STATIC_ASSETS_DIR")
 
-	// fs := http.FileServer(http.Dir("public"))
-	// http.Handle("/public/", http.StripPrefix("/public/", fs))
-
-	http.HandleFunc("/", static)
-	http.HandleFunc("/posts", posts)
-
-	log.Printf("Listening to port %v", PORT)
-	http.ListenAndServe(":"+strconv.Itoa(PORT), nil)
+// neuteredFileSystem is used to prevent directory listing of static assets
+type neuteredFileSystem struct {
+	fs http.FileSystem
 }
+
+func (nfs neuteredFileSystem) Open(path string) (http.File, error) {
+	// Check if path exists
+	f, err := nfs.fs.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
+	// If path exists, check if is a file or a directory.
+	// If is a directory, stop here with an error saying that file
+	// does not exist. So user will get a 404 error code for a file or directory
+	// that does not exist, and for directories that exist.
+	s, err := f.Stat()
+	if err != nil {
+		return nil, err
+	}
+	if s.IsDir() {
+		return nil, os.ErrNotExist
+	}
+
+	// If file exists and the path is not a directory, let's return the file
+	return f, nil
+}
+
+// func main() {
+//     [...]
+//     // Serve static files while preventing directory listing
+//     mux := http.NewServeMux()
+//     fs := http.FileServer(neuteredFileSystem{http.Dir(staticAssetsDir)})
+//     mux.Handle("/", fs)
+//     [...]
+// }
+
+// func main() {
+// 	PORT := os.Getenv("PORT")
+
+// 	// fs := http.FileServer(neuteredFileSystem{http.Dir(staticAssetsDir)})
+// 	// http.Handle("/public/", http.StripPrefix("/public/", fs))
+
+// 	http.HandleFunc("/", front)
+// 	http.HandleFunc("/posts", posts)
+
+// 	// mux := http.NewServeMux()
+// 	// fs := http.FileServer(neuteredFileSystem{http.Dir(staticAssetsDir)})
+// 	// mux.Handle("/", fs)
+
+// 	log.Printf("Listening to port %v", PORT)
+// 	http.ListenAndServe(":"+PORT, nil)
+// }
