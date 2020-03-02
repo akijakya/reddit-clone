@@ -1,0 +1,35 @@
+language: go
+
+go:
+- "1.14"
+      
+services:
+  - docker
+      
+notifications:
+  email:
+    recipients:
+      - jakyandras@gmail.com
+    on_success: change # default: change
+    on_failure: always # default: always
+      
+# before_script:
+#   - npm install
+
+script:
+  - go build app.go
+#  - npm run test -- --watch=false
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "gobackend" ]; then
+    # npm run build;
+    docker build -t akijakya/reacdit-go -f Dockerfile .;
+    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin;
+    docker push akijakya/reacdit-go;
+    fi
+
+# deploy:
+#   provider: heroku
+#   api_key: ...
+#   on:
+#     branch: gobackend
