@@ -15,15 +15,15 @@ notifications:
     on_failure: always # default: always
 
 script:
-    - if [ "$TRAVIS_BRANCH" == "gobackend" ]; then
+    - if [ "$TRAVIS_BRANCH" == "master" ]; then
       npm run build;
-      docker build -t akijakya/reacdit-go -f Dockerfile .;
+      docker build -t akijakya/reddit-clone -f Dockerfile .;
       echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin;
-      docker push akijakya/reacdit-go;
+      docker push akijakya/reddit-clone;
       fi
   
   # deploy:
   #   provider: heroku
   #   api_key: ...
   #   on:
-  #     branch: gobackend
+  #     branch: master
