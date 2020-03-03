@@ -1,0 +1,29 @@
+sudo: required
+dist: trusty
+language: node_js
+node_js:
+ - stable
+
+services:
+  - docker
+
+notifications:
+  email:
+    recipients:
+      - jakyandras@gmail.com
+    on_success: change # default: change
+    on_failure: always # default: always
+
+script:
+    - if [ "$TRAVIS_BRANCH" == "master" ]; then
+      npm run build;
+      docker build -t akijakya/reddit-clone -f Dockerfile .;
+      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin;
+      docker push akijakya/reddit-clone;
+      fi
+  
+  # deploy:
+  #   provider: heroku
+  #   api_key: ...
+  #   on:
+  #     branch: master
